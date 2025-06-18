@@ -1,0 +1,54 @@
+# Java / Maven
+/target/
+*.class
+*.jar
+*.war
+
+# Maven Wrapper
+.mvn/wrapper/maven-wrapper.jar
+
+# Build logs
+*.log
+
+# Spring Boot
+*.env
+application-*.yml
+application-*.properties
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# STS (Spring Tool Suite)
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+/build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# VS Code
+.vscode/
+
+# OS/System Files
+.DS_Store
+Thumbs.db
+
+# Heroku Procfile (include this file in your repo)
+/Procfile
+
+# Optional Help or Docs
+HELP.md
