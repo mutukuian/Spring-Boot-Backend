@@ -23,6 +23,13 @@ public class UserService {
     }
 
     public void registerUser(User user) {
+        String role = user.getRole();
+        if (role == null || role.isBlank()) {
+            role = "ROLE_USER"; // Default role
+        } else if (!role.startsWith("ROLE_")) {
+            role = "ROLE_" + role.toUpperCase();
+        }
+        user.setRole(role);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
