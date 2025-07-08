@@ -1,5 +1,7 @@
-package com.projects.learningspringboot;
+package com.projects.learningspringboot.controller;
 
+import com.projects.learningspringboot.model.SoftwareEngineer;
+import com.projects.learningspringboot.service.SoftwareEngineerService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

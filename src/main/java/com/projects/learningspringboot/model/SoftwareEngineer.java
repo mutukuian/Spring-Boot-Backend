@@ -1,4 +1,4 @@
-package com.projects.learningspringboot;
+package com.projects.learningspringboot.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
