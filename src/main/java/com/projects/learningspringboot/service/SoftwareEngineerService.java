@@ -1,5 +1,7 @@
-package com.projects.learningspringboot;
+package com.projects.learningspringboot.service;
 
+import com.projects.learningspringboot.model.SoftwareEngineer;
+import com.projects.learningspringboot.repository.SoftwareEngineerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
