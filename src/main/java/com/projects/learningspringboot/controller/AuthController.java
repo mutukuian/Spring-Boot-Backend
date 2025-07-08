@@ -33,12 +33,21 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
             User user = userService.authenticateUserByUsername(request.getUsername(), request.getPassword());
-            String token = jwtUtil.generateToken(user.getUsername(),user.getRole());
+
+            System.out.println("✅ Authenticated user: " + user.getUsername() + ", role: " + user.getRole());
+
+            String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
+
             return ResponseEntity.ok(new JwtResponse(token));
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
+            System.out.println("❌ Authentication failed: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        } catch (Exception e) {
+            System.out.println("❌ Unexpected error during login: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong");
         }
     }
+
 
     @GetMapping("/users")
     public List<User> getAllUsers() {

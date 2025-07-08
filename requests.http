@@ -21,7 +21,7 @@ POST https://springbootbackend-7b88ebb3ac07.herokuapp.com/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "username": "john_doe",
+  "username": "walter_white",
   "password": "securePassword123"
 }
 
@@ -31,7 +31,7 @@ POST https://springbootbackend-7b88ebb3ac07.herokuapp.com/api/v1/auth/register
 Content-Type: application/json
 
 {
-  "username": "john_doe",
+  "username": "walter_white",
   "password": "securePassword123"
 }
 
@@ -43,4 +43,28 @@ GET https://springbootbackend-7b88ebb3ac07.herokuapp.com/api/v1/auth/users
 GET https://springbootbackend-7b88ebb3ac07.herokuapp.com/api/v1/auth/users/1
 
 
+###LOCAL DEVELOPMENT
 
+###Get All Users
+GET http://localhost:8080/api/v1/auth/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9BRE1JTiIsInN1YiI6Ik1hdGFnYXJvIEh1bXByZXkiLCJpYXQiOjE3NTE5OTM3NzIsImV4cCI6MTc1MTk5NzM3Mn0.0kwlWRSR5FBTEeRaearGC8ICF3W0eYcWP9leHQNH23c
+###  Get User by ID
+GET http://localhost:8080/api/v1/auth/users/1
+
+### Register User
+POST http://localhost:8080/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "username": "Matagaro Hump",
+  "password": "securePassword123"
+}
+
+### Login User
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "Matagaro Humprey",
+  "password": "securePassword123"
+}

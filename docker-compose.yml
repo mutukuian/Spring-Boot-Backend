@@ -1,3 +1,28 @@
+# PRODUCTION
+#services:
+#  db:
+#    container_name: postgres-spring-boot
+#    image: postgres:latest
+#    environment:
+#      POSTGRES_USER: ian
+#      POSTGRES_PASSWORD: password
+#      PGDATA: /data/postgres
+#    volumes:
+#      - db:/data/postgres
+#    ports:
+#      - "5332:5432"
+#    networks:
+#      - db
+#    restart: unless-stopped
+#networks:
+#  db:
+#    driver: bridge
+#
+#volumes:
+#  db:
+
+#DEVELOPMENT
+version: '3.8'
 services:
   db:
     container_name: postgres-spring-boot
@@ -5,7 +30,7 @@ services:
     environment:
       POSTGRES_USER: ian
       POSTGRES_PASSWORD: password
-      PGDATA: /data/postgres
+      POSTGRES_DB: learningdb
     volumes:
       - db:/data/postgres
     ports:
@@ -13,6 +38,7 @@ services:
     networks:
       - db
     restart: unless-stopped
+
 networks:
   db:
     driver: bridge
