@@ -1,6 +1,9 @@
 package com.projects.learningspringboot.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
@@ -11,11 +14,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank(message = "Username is required")
     private String username;
 
     @Column(unique = true)
+    @Email(message = "Invalid email format")
+    @NotBlank(message = "Email is required")
     private String email;
 
+    @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
     private String role; // USER, ADMIN

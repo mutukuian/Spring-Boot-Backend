@@ -47,10 +47,10 @@ GET https://springbootbackend-7b88ebb3ac07.herokuapp.com/api/v1/auth/users/1
 
 ###Get All Users
 GET http://localhost:8080/api/v1/auth/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9BRE1JTiIsInN1YiI6Ik1hdGFnYXJvIEh1bXByZXkiLCJpYXQiOjE3NTE5OTk5NzQsImV4cCI6MTc1MjAwMzU3NH0.6BHV5VQISHVm2VT0A5J8axpeZFuJlqWnBZCAHbBF4iQ
+Authorization: Bearer ...
 ###  Get User by ID
 GET http://localhost:8080/api/v1/auth/users/2
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9BRE1JTiIsInN1YiI6Ik1hdGFnYXJvIEh1bXByZXkiLCJpYXQiOjE3NTE5OTk5NzQsImV4cCI6MTc1MjAwMzU3NH0.6BHV5VQISHVm2VT0A5J8axpeZFuJlqWnBZCAHbBF4iQ
+Authorization: Bearer ...
 
 
 ### Register User
@@ -58,7 +58,8 @@ POST http://localhost:8080/api/v1/auth/register
 Content-Type: application/json
 
 {
-  "username": "Matagaro Hump",
+  "username": "Mata Hump",
+  "email": "Ian@kocela.com",
   "password": "securePassword123"
 }
 
@@ -67,6 +68,6 @@ POST http://localhost:8080/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "username": "Matagaro Humprey",
+  "username": "Mata Hump",
   "password": "securePassword123"
 }

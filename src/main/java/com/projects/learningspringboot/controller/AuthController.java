@@ -5,6 +5,7 @@ import com.projects.learningspringboot.model.LoginRequest;
 import com.projects.learningspringboot.model.User;
 import com.projects.learningspringboot.security.JwtUtil;
 import com.projects.learningspringboot.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
+    public ResponseEntity<String> register(@Valid @RequestBody User user) {
         userService.registerUser(user);
         return ResponseEntity.ok("User registered successfully");
     }

@@ -24,12 +24,26 @@ public class UserService {
     }
 
     public void registerUser(User user) {
+
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
+            throw new IllegalArgumentException("Email is required");
+        }
+
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalStateException("Email already in use");
+        }
+
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new IllegalStateException("Username already taken");
+        }
+
         String role = user.getRole();
         if (role == null || role.isBlank()) {
             role = "ROLE_USER"; // Default role
         } else if (!role.startsWith("ROLE_")) {
             role = "ROLE_" + role.toUpperCase();
         }
+
         user.setRole(role);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
