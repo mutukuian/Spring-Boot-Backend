@@ -32,14 +32,16 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
     }
 
-    public User authenticateUser(String email, String password) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("Invalid credentials"));
+
+    public User authenticateUserByUsername(String username, String password) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalStateException("Invalid credentials"));
 
         if (passwordEncoder.matches(password, user.getPassword())) {
             return user;
         } else {
-            throw new UserNotFoundException("Invalid credentials");
+            throw new IllegalStateException("Invalid credentials");
         }
     }
+
 }

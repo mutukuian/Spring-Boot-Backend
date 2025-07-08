@@ -1,39 +1,52 @@
 package com.projects.learningspringboot.controller;
 
+import com.projects.learningspringboot.model.JwtResponse;
+import com.projects.learningspringboot.model.LoginRequest;
 import com.projects.learningspringboot.model.User;
+import com.projects.learningspringboot.security.JwtUtil;
 import com.projects.learningspringboot.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
     private final UserService userService;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
-    public void register(@RequestBody User user) {
+    public ResponseEntity<String> register(@RequestBody User user) {
         userService.registerUser(user);
+        return ResponseEntity.ok("User registered successfully");
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String email, @RequestParam String password) {
-        User user = userService.authenticateUser(email, password);
-        return "Welcome, " + user.getUsername();
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        try {
+            User user = userService.authenticateUserByUsername(request.getUsername(), request.getPassword());
+            String token = jwtUtil.generateToken(user.getUsername());
+            return ResponseEntity.ok(new JwtResponse(token));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
     }
 
     @GetMapping("/users")
-    public List<User> getUsers() {
+    public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @GetMapping("/users/{id}")
-    public User getUser(@PathVariable Integer id) {
+    public User getUserById(@PathVariable Integer id) {
         return userService.getUserById(id);
     }
 }
