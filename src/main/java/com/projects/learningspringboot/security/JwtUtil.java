@@ -1,5 +1,6 @@
 package com.projects.learningspringboot.security;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -16,19 +17,31 @@ import java.util.Map;
 
 @Component
 public class JwtUtil {
-  //  private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    @Value("${jwt.secret}")
-    private String secret;
+
+//    @Value("${jwt.secret}")
+//    private String secret;
 
 
     private Key key;
     private final long expirationMillis = 1000 * 60 * 60; // 1 hour
 
-    @PostConstruct
-    public void init() {
+    public JwtUtil() {
+        Dotenv dotenv = Dotenv.load(); // Loads .env from root
+        String secret = dotenv.get("JWT_SECRET");
+
+        if (secret == null || secret.isEmpty()) {
+            throw new IllegalStateException("JWT_SECRET is not set in .env file!");
+        }
+
         byte[] decodedKey = Base64.getDecoder().decode(secret);
         this.key = Keys.hmacShaKeyFor(decodedKey);
     }
+
+//    @PostConstruct
+//    public void init() {
+//        byte[] decodedKey = Base64.getDecoder().decode(secret);
+//        this.key = Keys.hmacShaKeyFor(decodedKey);
+//    }
 
     public String generateToken(String username, String role) {
         Map<String, Object> claims = new HashMap<>();
