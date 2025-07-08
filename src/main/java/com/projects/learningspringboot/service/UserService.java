@@ -13,6 +13,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -43,10 +44,14 @@ public class UserService {
     public User authenticateUserByUsername(String username, String password) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalStateException("Invalid credentials"));
+        System.out.println("🔐 Raw password entered: " + password);
+        System.out.println("🧾 Hashed password from DB: " + user.getPassword());
 
         if (passwordEncoder.matches(password, user.getPassword())) {
+            System.out.println("✅ Passwords match!");
             return user;
         } else {
+            System.out.println("❌ Passwords do NOT match!");
             throw new IllegalStateException("Invalid credentials");
         }
     }
