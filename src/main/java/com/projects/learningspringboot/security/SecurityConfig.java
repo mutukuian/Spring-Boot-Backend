@@ -18,8 +18,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
-                .csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(Customizer.withDefaults());
+                .csrf(AbstractHttpConfigurer::disable);
+              //  .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
