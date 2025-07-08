@@ -16,5 +16,30 @@ Content-Type: application/json
   "techStack": ["Kotlin", "Jetpack-compose", "Spring-Boot","XML"]
 }
 
+### Login User
+POST https://springbootbackend-7b88ebb3ac07.herokuapp.com/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "testuser@example.com",
+  "password": "yourPassword123"
+}
+
+### Register User
+POST https://springbootbackend-7b88ebb3ac07.herokuapp.com/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "testuser@example.com",
+  "password": "yourPassword123"
+}
+
+### Get All Users
+GET https://springbootbackend-7b88ebb3ac07.herokuapp.com/api/v1/auth/users
+
+### Get User by ID
+GET https://springbootbackend-7b88ebb3ac07.herokuapp.com/api/v1/auth/users/1
+
 
 
