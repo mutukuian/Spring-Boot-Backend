@@ -1,4 +1,4 @@
-package com.projects.learningspringboot.model;
+package com.projects.learningspringboot.model.dto;
 
 public class JwtResponse {
     private String token;

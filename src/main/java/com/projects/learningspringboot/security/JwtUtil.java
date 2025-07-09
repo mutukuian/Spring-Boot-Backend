@@ -20,7 +20,7 @@ public class JwtUtil {
     private final long expirationMillis = 1000 * 60 * 60; // 1 hour
 
     public JwtUtil() {
-        Dotenv dotenv = Dotenv.load(); // Loads .env from root
+        Dotenv dotenv = Dotenv.load();
         String secret = dotenv.get("JWT_SECRET");
 
         if (secret == null || secret.isEmpty()) {
@@ -32,9 +32,27 @@ public class JwtUtil {
     }
 
 
+//    public String generateToken(String username, String role) {
+//        Map<String, Object> claims = new HashMap<>();
+//        claims.put("role", role);
+//        return Jwts.builder()
+//                .setClaims(claims)
+//                .setSubject(username)
+//                .setIssuedAt(new Date(System.currentTimeMillis()))
+//                .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
+//                .signWith(key, SignatureAlgorithm.HS256)
+//                .compact();
+//    }
+
     public String generateToken(String username, String role) {
         Map<String, Object> claims = new HashMap<>();
+
+        if (!role.startsWith("ROLE_")) {
+            role = "ROLE_" + role.toUpperCase();
+        }
+
         claims.put("role", role);
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(username)
@@ -43,6 +61,7 @@ public class JwtUtil {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
+
 
 
     public String extractUsername(String token) {

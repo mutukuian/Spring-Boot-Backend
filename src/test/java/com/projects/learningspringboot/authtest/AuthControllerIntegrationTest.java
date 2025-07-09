@@ -1,6 +1,6 @@
-package com.projects.learningspringboot;
+package com.projects.learningspringboot.authtest;
 
-import com.projects.learningspringboot.model.User;
+import com.projects.learningspringboot.model.authmodel.User;
 import com.projects.learningspringboot.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,11 +44,33 @@ public class AuthControllerIntegrationTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    void registerUser_duplicateEmail_shouldFail() throws Exception {
-        userRepository.save(new User(null,"existing", "dup@example.com", "pass123", "ROLE_USER"));
+//    @Test
+//    void registerUser_duplicateEmail_shouldFail() throws Exception {
+//        userRepository.save(new User(null,"existing", "dup@example.com", "pass123", "ROLE_USER"));
+//
+//        String userJson = """
+//        {
+//            "username": "another_user",
+//            "email": "dup@example.com",
+//            "password": "pass123"
+//        }
+//        """;
+//
+//        mockMvc.perform(post("/api/v1/auth/register")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(userJson))
+//                .andExpect(status().isConflict());
+//    }
+@Test
+void registerUser_duplicateEmail_shouldFail() throws Exception {
+    User existingUser = new User();
+    existingUser.setUsername("existing");
+    existingUser.setEmail("dup@example.com");
+    existingUser.setPassword("pass123");
+    existingUser.setRoleId(2);
+    userRepository.save(existingUser);
 
-        String userJson = """
+    String userJson = """
         {
             "username": "another_user",
             "email": "dup@example.com",
@@ -56,10 +78,11 @@ public class AuthControllerIntegrationTest {
         }
         """;
 
-        mockMvc.perform(post("/api/v1/auth/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(userJson))
-                .andExpect(status().isConflict()); // assuming you handle duplicate as 409
-    }
+    mockMvc.perform(post("/api/v1/auth/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(userJson))
+            .andExpect(status().isConflict());
+}
+
 }
 
