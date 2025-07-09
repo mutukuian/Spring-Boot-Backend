@@ -21,20 +21,46 @@
 #volumes:
 #  db:
 
-#DEVELOPMENT
+#DEVELOPMENT  PSQL
+#version: '3.8'
+#services:
+#  db:
+#    container_name: postgres-spring-boot
+#    image: postgres:latest
+#    environment:
+#      POSTGRES_USER: ian
+#      POSTGRES_PASSWORD: password
+#      POSTGRES_DB: learningdb
+#    volumes:
+#      - db:/data/postgres
+#    ports:
+#      - "5332:5432"
+#    networks:
+#      - db
+#    restart: unless-stopped
+#
+#networks:
+#  db:
+#    driver: bridge
+#
+#volumes:
+#  db:
+
 version: '3.8'
+
 services:
-  db:
-    container_name: postgres-spring-boot
-    image: postgres:latest
+  mysql:
+    container_name: mysql-spring-boot
+    image: mysql:8.0
     environment:
-      POSTGRES_USER: ian
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: learningdb
-    volumes:
-      - db:/data/postgres
+      MYSQL_ROOT_PASSWORD: Software1!!!
+      MYSQL_USER: ian
+      MYSQL_PASSWORD: Software1!!!
+      MYSQL_DATABASE: monitoring_tool_bidhaa_sasa
     ports:
-      - "5332:5432"
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
     networks:
       - db
     restart: unless-stopped
@@ -44,4 +70,4 @@ networks:
     driver: bridge
 
 volumes:
-  db:
+  mysql_data:
