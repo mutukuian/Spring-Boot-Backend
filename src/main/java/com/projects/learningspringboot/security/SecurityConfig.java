@@ -26,7 +26,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/login", "/api/v1/auth/register","/api/v1/auth/change-password").permitAll()
+                        .requestMatchers("/api/v1/auth/").permitAll() // Allow access to the main action-based auth POST
+                        .requestMatchers("/api/v1/auth/change-password").permitAll()
                         .requestMatchers("/api/v1/auth/users/**").hasRole("ADMIN")
                         .anyRequest().hasAnyRole("USER", "ADMIN")
                 )

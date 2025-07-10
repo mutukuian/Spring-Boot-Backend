@@ -46,44 +46,51 @@ GET https://springbootbackend-7b88ebb3ac07.herokuapp.com/api/v1/auth/users/1
 ###LOCAL DEVELOPMENT
 
 ### Get All Users
-GET http://localhost:8080/api/v1/auth/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV8xIiwic3ViIjoiY2xlbSIsImlhdCI6MTc1MjA4NTc0OCwiZXhwIjoxNzUyMDg5MzQ4fQ.aSYBFlNraBmBejXbWYaAGuHecGbVndme_wc9XPyAFH8
+GET https://a4b0c6627c7e.ngrok-free.app/api/v1/auth/users
+Authorization: Bearer
 
 ### Get User by ID
-GET http://localhost:8080/api/v1/auth/users/2
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV8xIiwic3ViIjoiY2xlbSIsImlhdCI6MTc1MjA4NTc0OCwiZXhwIjoxNzUyMDg5MzQ4fQ.aSYBFlNraBmBejXbWYaAGuHecGbVndme_wc9XPyAFH8
+GET https://a4b0c6627c7e.ngrok-free.app/api/v1/auth/users/5
+Authorization: Bearer
 
 
 
 ### Register User
-POST http://localhost:8080/api/v1/auth/register
+POST https://a4b0c6627c7e.ngrok-free.app/api/v1/auth/
 Content-Type: application/json
 
 {
-  "username": "clem",
-  "firstName": "Clement",
-  "lastName": "Nthuli",
+  "action":"register",
+  "username": "Timoothy",
+  "firstName": "omosh",
+  "lastName": "Tim",
   "phoneNumber": "0786304557",
-  "email": "clem@gmail.com",
-  "role": "ADMIN"
+  "email": "timoothy@gmail.com",
+  "role": "USER"
 }
 
 
 ### Login User
-POST http://localhost:8080/api/v1/auth/login
+POST https://a4b0c6627c7e.ngrok-free.app/api/v1/auth/
 Content-Type: application/json
 
 {
-  "username": "clem",
-  "password": "209909"
+  "action":"userLogin",
+  "username": "Timoothy",
+  "password": "nthuli"
 }
+
+
+
 
 ### Change Password
-POST http://localhost:8080/api/v1/auth/change-password
+POST https://a4b0c6627c7e.ngrok-free.app/api/v1/auth/change-password
 Content-Type: application/json
 
 {
-  "username": "clem",
+  "username": "Timoothy",
   "newPassword": "nthuli"
 }
+
+
 

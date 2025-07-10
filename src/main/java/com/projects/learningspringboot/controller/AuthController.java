@@ -26,39 +26,101 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
+        @PostMapping("/")
+        public ResponseEntity<?> handleAction(@RequestBody Map<String, Object> requestBody) {
+            String action = (String) requestBody.get("action");
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        userService.registerUser(request);
-        return ResponseEntity.ok("User registered. OTP sent to phone.");
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        try {
-            User user = userService.authenticateUserByUsername(request.getUsername(), request.getPassword());
-
-            System.out.println("Authenticated user: " + user.getUsername() + ", role: " + user.getRoleId());
-
-            String token = jwtUtil.generateToken(user.getUsername(), "ROLE_" + user.getRoleId());
-
-            return ResponseEntity.ok(new JwtResponse(token));
-        } catch (IllegalStateException e) {
-            if (e.getMessage().equalsIgnoreCase("changepassword")) {
-                // Let the frontend know to redirect user to change password page
-                return ResponseEntity.status(HttpStatus.OK).body(Map.of(
-                        "status", "changepassword",
-                        "username", request.getUsername(),
-                        "message", "OTP verified, please change your password"
+            try {
+                if ("register".equalsIgnoreCase(action)) {
+                    RegisterRequest request = mapToRegisterRequest(requestBody);
+                    userService.registerUser(request);
+                    return ResponseEntity.ok(Map.of(
+                            "status", "success",
+                            "message", "User registered. OTP sent to phone."
+                    ));
+                } else if ("userLogin".equalsIgnoreCase(action)) {
+                    LoginRequest request = mapToLoginRequest(requestBody);
+                    return loginUser(request);
+                } else {
+                    return ResponseEntity.badRequest().body(Map.of(
+                            "status", "failure",
+                            "message", "Unsupported action: " + action
+                    ));
+                }
+            } catch (IllegalStateException e) {
+                if ("changepassword".equalsIgnoreCase(e.getMessage())) {
+                    return ResponseEntity.ok(Map.of(
+                            "status", "changepassword",
+                            "username", requestBody.get("username"),
+                            "message", "OTP verified, please change your password"
+                    ));
+                }
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
+                        "status", "failure",
+                        "message", "Invalid credentials"
+                ));
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                        "status", "failure",
+                        "message", "Something went wrong"
                 ));
             }
-            System.out.println("Authentication failed: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-        } catch (Exception e) {
-            System.out.println("Unexpected error during login: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong");
         }
+
+//        private ResponseEntity<?> loginUser(LoginRequest request) {
+//            User user = userService.authenticateUserByUsername(request.getUsername(), request.getPassword());
+//            String token = jwtUtil.generateToken(user.getUsername(), "ROLE_" + user.getRoleId());
+//
+//            return ResponseEntity.ok(Map.of(
+//                    "status", "success",
+//                    "message", "Login successful",
+//                    "sessionToken", token
+//            ));
+//        }
+
+    private ResponseEntity<?> loginUser(LoginRequest request) {
+        User user = userService.authenticateUserByUsername(request.getUsername(), request.getPassword());
+        String token = jwtUtil.generateToken(user.getUsername(), "ROLE_" + user.getRoleId());
+
+        // Fetch roleName from service or repository using roleId
+        String roleName = userService.getRoleNameById(user.getRoleId());
+
+        return ResponseEntity.ok(Map.of(
+                "status", "success",
+                "message", "Login successful",
+                "sessionToken", token,
+                "role", roleName
+        ));
     }
+
+
+
+    private LoginRequest mapToLoginRequest(Map<String, Object> map) {
+            LoginRequest request = new LoginRequest();
+            request.setAction((String) map.get("action"));
+            request.setUsername((String) map.get("username"));
+            request.setPassword((String) map.get("password"));
+            return request;
+        }
+
+    private RegisterRequest mapToRegisterRequest(Map<String, Object> map) {
+        RegisterRequest request = new RegisterRequest();
+        request.setAction((String) map.get("action"));
+        request.setUsername((String) map.get("username"));
+        request.setFirstName((String) map.get("firstName"));
+        request.setLastName((String) map.get("lastName"));
+        request.setPhoneNumber((String) map.get("phoneNumber"));
+        request.setEmail((String) map.get("email"));
+
+        // Fix role handling to always convert to String
+        Object role = map.get("role");
+        if (role != null) {
+            request.setRole(String.valueOf(role));
+        }
+
+        return request;
+    }
+
 
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) {
