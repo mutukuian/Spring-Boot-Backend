@@ -67,7 +67,7 @@ public class UserService {
         userOtp.setStatusId(0);
         userOtpRepository.save(userOtp);
 
-        // Send OTP via SMS (mock or real)
+        // Send OTP via SMS
         sendOtpToPhone(user.getPhoneNumber(), otp);
     }
 
@@ -86,21 +86,6 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
     }
 
-
-//    public User authenticateUserByUsername(String username, String password) {
-//        User user = userRepository.findByUsername(username)
-//                .orElseThrow(() -> new IllegalStateException("Invalid credentials"));
-//        System.out.println("Raw password entered: " + password);
-//        System.out.println("Hashed password from DB: " + user.getPassword());
-//
-//        if (passwordEncoder.matches(password, user.getPassword())) {
-//            System.out.println("Passwords match!");
-//            return user;
-//        } else {
-//            System.out.println("Passwords do NOT match!");
-//            throw new IllegalStateException("Invalid credentials");
-//        }
-//    }
 
     public User authenticateUserByUsername(String username, String password) {
         User user = userRepository.findByUsername(username)
@@ -150,6 +135,10 @@ public class UserService {
         userRepository.save(user);
 
         return "Password updated successfully";
+    }
+
+    public String getRoleNameById(int roleId) {
+        return userRepository.findRoleNameById(roleId);
     }
 
 }
