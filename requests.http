@@ -46,17 +46,30 @@ GET https://springbootbackend-7b88ebb3ac07.herokuapp.com/api/v1/auth/users/1
 ###LOCAL DEVELOPMENT
 
 ### Get All Users
-GET https://a4b0c6627c7e.ngrok-free.app/api/v1/auth/users
-Authorization: Bearer
+POST https://2ff94588cbf6.ngrok-free.app/api/v1/auth/user
+Content-Type: application/json
+
+{
+"action":"fetchAllUsers"
+}
+
+###
+GET https://2ff94588cbf6.ngrok-free.app/api/v1/auth?action=fetchAllUsers
+
 
 ### Get User by ID
-GET https://a4b0c6627c7e.ngrok-free.app/api/v1/auth/users/5
-Authorization: Bearer
+GET https://2ff94588cbf6.ngrok-free.app/api/v1/auth/
+
+{
+  "action": "fetchUserById",
+  "id": 8
+}
+
 
 
 
 ### Register User
-POST https://a4b0c6627c7e.ngrok-free.app/api/v1/auth/
+POST https://2ff94588cbf6.ngrok-free.app/api/v1/auth/
 Content-Type: application/json
 
 {
@@ -71,7 +84,7 @@ Content-Type: application/json
 
 
 ### Login User
-POST https://a4b0c6627c7e.ngrok-free.app/api/v1/auth/
+POST https://2ff94588cbf6.ngrok-free.app/api/v1/auth/
 Content-Type: application/json
 
 {
@@ -84,7 +97,7 @@ Content-Type: application/json
 
 
 ### Change Password
-POST https://a4b0c6627c7e.ngrok-free.app/api/v1/auth/change-password
+POST https://2ff94588cbf6.ngrok-free.app/api/v1/auth/change-password
 Content-Type: application/json
 
 {

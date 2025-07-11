@@ -26,57 +26,103 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-        @PostMapping("/")
-        public ResponseEntity<?> handleAction(@RequestBody Map<String, Object> requestBody) {
-            String action = (String) requestBody.get("action");
+//        @PostMapping("/")
+//        public ResponseEntity<?> handleAction(@RequestBody Map<String, Object> requestBody) {
+//            String action = (String) requestBody.get("action");
+//
+//            try {
+//                if ("register".equalsIgnoreCase(action)) {
+//                    RegisterRequest request = mapToRegisterRequest(requestBody);
+//                    userService.registerUser(request);
+//                    return ResponseEntity.ok(Map.of(
+//                            "status", "success",
+//                            "message", "User registered. OTP sent to phone."
+//                    ));
+//                } else if ("userLogin".equalsIgnoreCase(action)) {
+//                    LoginRequest request = mapToLoginRequest(requestBody);
+//                    return loginUser(request);
+//                } else {
+//                    return ResponseEntity.badRequest().body(Map.of(
+//                            "status", "failure",
+//                            "message", "Unsupported action: " + action
+//                    ));
+//                }
+//            } catch (IllegalStateException e) {
+//                if ("changepassword".equalsIgnoreCase(e.getMessage())) {
+//                    return ResponseEntity.ok(Map.of(
+//                            "status", "changepassword",
+//                            "username", requestBody.get("username"),
+//                            "message", "OTP verified, please change your password"
+//                    ));
+//                }
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
+//                        "status", "failure",
+//                        "message", "Invalid credentials"
+//                ));
+//            } catch (Exception e) {
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+//                        "status", "failure",
+//                        "message", "Something went wrong"
+//                ));
+//            }
+//        }
 
-            try {
-                if ("register".equalsIgnoreCase(action)) {
-                    RegisterRequest request = mapToRegisterRequest(requestBody);
-                    userService.registerUser(request);
+    @PostMapping("/")
+    public ResponseEntity<?> handleAction(@RequestBody Map<String, Object> requestBody) {
+        String action = (String) requestBody.get("action");
+
+        try {
+            switch (action) {
+                case "register":
+                    RegisterRequest registerRequest = mapToRegisterRequest(requestBody);
+                    userService.registerUser(registerRequest);
                     return ResponseEntity.ok(Map.of(
                             "status", "success",
                             "message", "User registered. OTP sent to phone."
                     ));
-                } else if ("userLogin".equalsIgnoreCase(action)) {
-                    LoginRequest request = mapToLoginRequest(requestBody);
-                    return loginUser(request);
-                } else {
+
+                case "userLogin":
+                    LoginRequest loginRequest = mapToLoginRequest(requestBody);
+                    return loginUser(loginRequest);
+
+//                case "fetchAllUsers":
+//                    List<User> allUsers = userService.getAllUsers();
+//                    return ResponseEntity.ok(allUsers);
+//
+//                case "fetchUserById":
+//                    Integer userId = Integer.parseInt(requestBody.get("id").toString());
+//                    User user = userService.getUserById(userId);
+//                    return ResponseEntity.ok(user);
+
+                default:
                     return ResponseEntity.badRequest().body(Map.of(
                             "status", "failure",
                             "message", "Unsupported action: " + action
                     ));
-                }
-            } catch (IllegalStateException e) {
-                if ("changepassword".equalsIgnoreCase(e.getMessage())) {
-                    return ResponseEntity.ok(Map.of(
-                            "status", "changepassword",
-                            "username", requestBody.get("username"),
-                            "message", "OTP verified, please change your password"
-                    ));
-                }
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
-                        "status", "failure",
-                        "message", "Invalid credentials"
-                ));
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                        "status", "failure",
-                        "message", "Something went wrong"
+            }
+        } catch (IllegalStateException e) {
+            if ("changepassword".equalsIgnoreCase(e.getMessage())) {
+                return ResponseEntity.ok(Map.of(
+                        "status", "changepassword",
+                        "username", requestBody.get("username"),
+                        "message", "OTP verified, please change your password"
                 ));
             }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
+                    "status", "failure",
+                    "message", "Invalid credentials"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "status", "failure",
+                    "message", "Something went wrong"
+            ));
         }
+    }
 
-//        private ResponseEntity<?> loginUser(LoginRequest request) {
-//            User user = userService.authenticateUserByUsername(request.getUsername(), request.getPassword());
-//            String token = jwtUtil.generateToken(user.getUsername(), "ROLE_" + user.getRoleId());
-//
-//            return ResponseEntity.ok(Map.of(
-//                    "status", "success",
-//                    "message", "Login successful",
-//                    "sessionToken", token
-//            ));
-//        }
+
+
+
 
     private ResponseEntity<?> loginUser(LoginRequest request) {
         User user = userService.authenticateUserByUsername(request.getUsername(), request.getPassword());
@@ -139,15 +185,42 @@ public class AuthController {
         }
     }
 
+    @GetMapping("/")
+    public ResponseEntity<?> handleGetActions(@RequestParam String action) {
+        if ("fetchAllUsers".equalsIgnoreCase(action)) {
+            // Optional: Enforce admin-only restriction internally
+            List<User> users = userService.getAllUsers();
+            return ResponseEntity.ok(users);
+        }
 
-
-    @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+        return ResponseEntity.badRequest().body(Map.of(
+                "status", "failure",
+                "message", "Unsupported action: " + action
+        ));
     }
 
     @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable Integer id) {
-        return userService.getUserById(id);
+    public ResponseEntity<?> handleGetUserById(@PathVariable Integer id, @RequestParam String action) {
+        if ("fetchUserById".equalsIgnoreCase(action)) {
+            User user = userService.getUserById(id);
+            return ResponseEntity.ok(user);
+        }
+
+        return ResponseEntity.badRequest().body(Map.of(
+                "status", "failure",
+                "message", "Unsupported action: " + action
+        ));
     }
+
+
+
+//    @GetMapping("/fetchAllUsers")
+//    public List<User> getAllUsers() {
+//        return userService.getAllUsers();
+//    }
+//
+//    @GetMapping("/users/{id}")
+//    public User getUserById(@PathVariable Integer id) {
+//        return userService.getUserById(id);
+//    }
 }
